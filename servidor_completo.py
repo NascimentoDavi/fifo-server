@@ -1,3 +1,4 @@
+# servidor.py
 import os
 
 SERVER_FIFO = "/tmp/rpc_req_fifo"
@@ -16,7 +17,7 @@ OPERACOES = {
     "sub": sub,
     "mult": mult,
     "div": div
-}
+}   
 
 print("Servidor RPC com múltiplas operações iniciado...")
 
@@ -34,6 +35,9 @@ while True:
             except Exception as e:
                 resultado = f"Erro: {str(e)}"
 
-            with open(resp_fifo, "w") as cliente:
-                cliente.write(str(resultado) + "\n")
-                cliente.flush()
+            # Espera o cliente abrir o FIFO antes de escrever
+            try:
+                with open(resp_fifo, "w") as cliente:
+                    cliente.write(str(resultado) + "\n")
+            except Exception as e:
+                print(f"Erro ao responder: {e}")

@@ -1,13 +1,13 @@
+# cliente.py
 import os
+import time
 
 SERVER_FIFO = "/tmp/rpc_req_fifo"
 CLIENT_FIFO = f"/tmp/rpc_resp_{os.getpid()}"
 
-# Cria os FIFOs (remove se já existir)
-for fifo in [SERVER_FIFO, CLIENT_FIFO]:
-    if os.path.exists(fifo):
-        os.remove(fifo)
-    os.mkfifo(fifo, mode=0o600)
+# Cria o FIFO de resposta se não existir
+if not os.path.exists(CLIENT_FIFO):
+    os.mkfifo(CLIENT_FIFO, mode=0o600)
 
 # Entrada do usuário
 entrada = input("Digite a operação e dois parâmetros (ex: soma 3 5): ")
@@ -25,3 +25,6 @@ with open(SERVER_FIFO, "w") as server:
 # Aguarda e lê a resposta
 with open(CLIENT_FIFO, "r") as resposta:
     print("Resultado:", resposta.readline().strip())
+
+# Remove o FIFO após uso
+os.remove(CLIENT_FIFO)
