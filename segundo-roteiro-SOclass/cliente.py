@@ -3,7 +3,7 @@ import os
 import time
 
 SERVER_FIFO = "/tmp/rpc_req_fifo"
-CLIENT_FIFO = f"/tmp/rpc_resp_{os.getpid()}"
+CLIENT_FIFO = f"/tmp/rpc_resp_{os.getpid()}" # Cada cliente gera um FIFO privado, com nome que incorpore o PID
 
 # Cria o FIFO de resposta se não existir
 if not os.path.exists(CLIENT_FIFO):
